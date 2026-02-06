@@ -39,7 +39,8 @@ jobs:
         run: |
           TAG="${GITHUB_REF_NAME}"
           DATE="$(date -u +%Y-%m-%d)"
-          echo "RELEASE_NOTES_PATH=${RUNNER_TEMP}/release-notes.md" >> $GITHUB_ENV
+          RELEASE_NOTES_PATH="${RUNNER_TEMP}/release-notes.md"
+          echo "RELEASE_NOTES_PATH=${RELEASE_NOTES_PATH}" >> $GITHUB_ENV
 
           PREV_TAG=$(git tag --sort=version:refname | awk -v tag="$TAG" '$0==tag{print prev; exit} {prev=$0}')
           if [ -n "$PREV_TAG" ]; then
@@ -60,7 +61,7 @@ jobs:
             BODY="${BODY}\n\n[Full Changelog](${COMPARE})"
           fi
 
-          printf "%b\n" "$BODY" > "$RELEASE_NOTES_PATH"
+          printf "%b\n" "$BODY" > "${RELEASE_NOTES_PATH}"
 
       - name: Update CHANGELOG.md
         run: |
