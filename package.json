@@ -7,7 +7,7 @@
   "icon": "media/logo.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/latex-regex-lint.git"
+    "url": "https://github.com/mingzhao2019/latexRegexLint.git"
   },
   "engines": {
     "vscode": "^1.85.0"
