@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -32,6 +34,73 @@ jobs:
             exit 1
           fi
 
+      - name: Generate changelog entry
+        id: changelog
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          DATE="$(date -u +%Y-%m-%d)"
+          echo "RELEASE_NOTES_PATH=${RUNNER_TEMP}/release-notes.md" >> $GITHUB_ENV
+
+          PREV_TAG=$(git tag --sort=version:refname | awk -v tag="$TAG" '$0==tag{print prev; exit} {prev=$0}')
+          if [ -n "$PREV_TAG" ]; then
+            RANGE="$PREV_TAG..$TAG"
+            COMPARE="https://github.com/${GITHUB_REPOSITORY}/compare/${PREV_TAG}...${TAG}"
+          else
+            RANGE="$TAG"
+            COMPARE=""
+          fi
+
+          NOTES=$(git log --pretty=format:"- %s (%h)" $RANGE)
+          if [ -z "$NOTES" ]; then
+            NOTES="- Initial release"
+          fi
+
+          BODY="## ${TAG} - ${DATE}\n${NOTES}"
+          if [ -n "$COMPARE" ]; then
+            BODY="${BODY}\n\n[Full Changelog](${COMPARE})"
+          fi
+
+          printf "%b\n" "$BODY" > "$RELEASE_NOTES_PATH"
+
+      - name: Update CHANGELOG.md
+        run: |
+          python - <<'PY'
+          import os
+
+          entry_path = os.environ.get("RELEASE_NOTES_PATH", "release-notes.md")
+          changelog_path = "CHANGELOG.md"
+
+          with open(entry_path, "r", encoding="utf-8") as f:
+              entry = f.read().rstrip() + "\n\n"
+
+          if not os.path.exists(changelog_path):
+              with open(changelog_path, "w", encoding="utf-8") as f:
+                  f.write("# Changelog\n\n")
+
+          with open(changelog_path, "r", encoding="utf-8") as f:
+              content = f.read()
+
+          if content.startswith("# Changelog"):
+              header, rest = content.split("\n", 1)
+              rest = rest.lstrip("\n")
+              updated = f"{header}\n\n{entry}{rest}"
+          else:
+              updated = entry + content
+
+          with open(changelog_path, "w", encoding="utf-8") as f:
+              f.write(updated)
+          PY
+
+          git checkout main
+          git pull --ff-only
+          git add CHANGELOG.md
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "Update CHANGELOG for ${GITHUB_REF_NAME}"
+            git push origin HEAD:main
+          fi
+
       - name: Compile
         run: npm run compile
 
@@ -43,5 +112,5 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          generate_release_notes: true
+          body_path: ${{ env.RELEASE_NOTES_PATH }}
           files: dist/*.vsix
