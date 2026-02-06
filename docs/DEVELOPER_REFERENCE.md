@@ -107,6 +107,9 @@ Note: update the `repository.url` in `package.json` before publishing to the mar
   - updates `CHANGELOG.md` on `main`,
   - builds a VSIX and creates a GitHub Release with the VSIX attached.
 
+### Marketplace publishing (step-by-step)
+See `docs/PUBLISHING.md` for the full checklist, required accounts, and common pitfalls.
+
 ### Install locally
 ```bash
 code --install-extension latex-regex-lint-0.0.1.vsix
