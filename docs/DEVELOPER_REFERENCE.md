@@ -99,6 +99,14 @@ Output: `latex-regex-lint-0.0.1.vsix`
 
 Note: update the `repository.url` in `package.json` before publishing to the marketplace.
 
+### Release workflow (GitHub Actions)
+- Push a tag like `v0.0.2` to trigger `.github/workflows/release.yml`.
+- The workflow:
+  - validates tag vs `package.json` version,
+  - generates a simple changelog entry from commits since the previous tag,
+  - updates `CHANGELOG.md` on `main`,
+  - builds a VSIX and creates a GitHub Release with the VSIX attached.
+
 ### Install locally
 ```bash
 code --install-extension latex-regex-lint-0.0.1.vsix
