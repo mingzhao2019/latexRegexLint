@@ -3,7 +3,7 @@
   "displayName": "LaTeX Regex Lint",
   "description": "Custom regex diagnostics for LaTeX",
   "version": "0.0.1",
-  "publisher": "local",
+  "publisher": "mingzhao2019",
   "icon": "media/logo.png",
   "repository": {
     "type": "git",

@@ -109,6 +109,11 @@ jobs:
           mkdir -p dist
           npx vsce package --out dist/latex-regex-lint-${GITHUB_REF_NAME}.vsix
 
+      - name: Publish to Marketplace
+        run: npx vsce publish --no-dependencies
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
