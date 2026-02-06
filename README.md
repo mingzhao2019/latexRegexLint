@@ -2,7 +2,8 @@
 
 [![Release](https://img.shields.io/github/v/release/mingzhao2019/latexRegexLint)](https://github.com/mingzhao2019/latexRegexLint/releases)
 [![Release Workflow](https://github.com/mingzhao2019/latexRegexLint/actions/workflows/release.yml/badge.svg)](https://github.com/mingzhao2019/latexRegexLint/actions/workflows/release.yml)
-[中文](README.zh.md)
+[![English](https://img.shields.io/badge/lang-English-blue)](README.md)
+[![中文](https://img.shields.io/badge/lang-中文-brightgreen)](README.zh.md)
 
 A VS Code extension that surfaces **custom, user-defined regex diagnostics** for LaTeX. It supports per-rule severity, multiline matching, Quick Fixes, inline ignore directives, range disable/enable blocks, file-level ignores, and whitelist dictionaries to keep patterns readable.
 

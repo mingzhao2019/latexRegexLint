@@ -3,7 +3,8 @@
 [![Release](https://img.shields.io/github/v/release/mingzhao2019/latexRegexLint)](https://github.com/mingzhao2019/latexRegexLint/releases)
 [![Release Workflow](https://github.com/mingzhao2019/latexRegexLint/actions/workflows/release.yml/badge.svg)](https://github.com/mingzhao2019/latexRegexLint/actions/workflows/release.yml)
 
-[English](README.md)
+[![English](https://img.shields.io/badge/lang-English-blue)](README.md)
+[![中文](https://img.shields.io/badge/lang-中文-brightgreen)](README.zh.md)
 
 这是一个 VS Code 插件，用于在 LaTeX 文档中显示**自定义正则**匹配到的问题。支持诊断等级、跨行规则、Quick Fix、行内忽略、范围禁用/启用、文件级忽略、白名单词典等功能。
 
@@ -135,4 +136,3 @@
 - 需要文件语言模式是 **LaTeX** 才会生效。
 - 正则语法为 JavaScript RegExp。
 - 规则不触发时，先检查 `maxLines` 或是否跨行。
-
