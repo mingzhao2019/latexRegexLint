@@ -2,7 +2,7 @@
   "name": "latex-regex-lint",
   "displayName": "LaTeX Regex Lint",
   "description": "Custom regex diagnostics for LaTeX",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "mingzhao2019",
   "icon": "media/logo.png",
   "repository": {
