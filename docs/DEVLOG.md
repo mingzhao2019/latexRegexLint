@@ -12,3 +12,6 @@
 ## 2026-02-06
 - Added publishing guide and linked it from developer reference.
 - Documented Marketplace/PAT workflow and tenant mismatch pitfall.
+
+## 2026-02-06
+- Fixed release workflow to include runtime dependencies in Marketplace publish.

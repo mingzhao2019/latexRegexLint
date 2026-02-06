@@ -111,7 +111,7 @@ jobs:
           npx vsce package --out dist/latex-regex-lint-${GITHUB_REF_NAME}.vsix
 
       - name: Publish to Marketplace
-        run: npx vsce publish --no-dependencies
+        run: npx vsce publish
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
