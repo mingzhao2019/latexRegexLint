@@ -1,0 +1,52 @@
+{
+  "latexRegexLint.rules": [
+    {
+      "id": "double-spaces-between-words",
+      "pattern": "\\b([A-Za-z]+)\\s{2,}([A-Za-z]+)\\b",
+      "message": "检测到单词间≥2空格：$1  $2（建议改为 1 个空格）",
+      "severity": "Warning",
+      "fix": "$1 $2"
+    },
+    {
+      "id": "comma-followed-by-blank-line",
+      "pattern": ",(?:\\s*\\r?\\n\\s*){2,}",
+      "message": "逗号后出现空行：请检查是否断句/换行不当",
+      "severity": "Warning",
+      "maxLines": 0
+    },
+    {
+      "id": "comma-before-linebreak-or-rightbrace",
+      "pattern": ",(?=\\s*(?:\\\\\\\\|\\}))",
+      "message": "逗号后紧跟 \\\\ 或 }：请人工检查（可能是断行/括号位置问题）",
+      "severity": "Warning",
+      "maxLines": 2
+    },
+    {
+      "id": "double-or-weird-punctuation-typo",
+      "pattern": "(?<!i\\.e)(?<!e\\.g)(?<!v\\.s)(?<!w\\.r\\.t)(?:(?:[,.]{2}(?!,))|(?:[,.]\\s+[,.])|\\.,|,\\.|;,|:\\.)",
+      "message": "疑似标点组合 typo / 双标点（已排除 i.e., e.g., v.s., w.r.t.）：请检查",
+      "severity": "Warning"
+    },
+    {
+      "id": "space-before-punctuation-skip-mathish",
+      "pattern": "(?<!\\\\)(?<!\\$)([^\\s\\\\$])\\s+([,.;:!?])",
+      "message": "标点前有多余空格：…$1 $2（注意：仍可能有少量公式/命令误报）",
+      "severity": "Warning",
+      "fix": "$1$2"
+    },
+    {
+      "id": "section-start-not-after-period",
+      "pattern": "(?<!\\.[ \\t\\r\\n]{0,200})(?<!\\\\end\\{(?:figure|figure\\*|table|proof|IEEEkeywords|table\\*|abstract|algorithm)\\}[ \\t\\r\\n]{0,200})\\\\(?:sub)*section\\b",
+      "message": "章节/小节开始前 200 字符内没有句号结尾（且不在排除的 \\end{...} 之后）：请检查断句/换行",
+      "severity": "Warning",
+      "maxLines": 0
+    },
+    {
+      "id": "formula-followed-by-capital-without-period",
+      "pattern": "\\}\\$\\s*[\\r\\n]+\\s*[A-Z]",
+      "message": "疑似公式后未正确结束句子（如缺少句号）导致下一句首字母大写：请检查",
+      "severity": "Warning",
+      "maxLines": 2
+    }
+  ]
+}

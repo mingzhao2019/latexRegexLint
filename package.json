@@ -1,0 +1,372 @@
+{
+  "name": "latex-regex-lint",
+  "displayName": "LaTeX Regex Lint",
+  "description": "Custom regex diagnostics for LaTeX",
+  "version": "0.0.1",
+  "publisher": "local",
+  "icon": "media/logo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/latex-regex-lint.git"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Linters"
+  ],
+  "activationEvents": [
+    "onLanguage:latex",
+    "onCommand:latexRegexLint.run",
+    "onCommand:latexRegexLint.removeIgnores"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "latexRegexLint.run",
+        "title": "LaTeX Regex Lint: Run"
+      },
+      {
+        "command": "latexRegexLint.removeIgnores",
+        "title": "LaTeX Regex Lint: Remove Ignore Directives"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "LaTeX Regex Lint",
+      "properties": {
+        "latexRegexLint": {
+          "type": "object",
+          "description": "Root object form for LaTeX Regex Lint settings.",
+          "properties": {
+            "rules": {
+              "type": "array",
+              "default": [
+                {
+                  "id": "double-space",
+                  "pattern": "  +",
+                  "flags": "g",
+                  "message": "Double spaces found",
+                  "severity": "warning",
+                  "fix": " "
+                }
+              ],
+              "items": {
+                "type": "object",
+                "required": [
+                  "pattern"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "Unique rule identifier used for diagnostics and ignores."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Alternate identifier (used if id is missing)."
+                  },
+                  "pattern": {
+                    "type": "string",
+                    "description": "JavaScript regex pattern (no enclosing slashes)."
+                  },
+                  "flags": {
+                    "type": "string",
+                    "description": "Regex flags, e.g. g, i, m. g is auto-added if missing."
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Diagnostic message to show."
+                  },
+                  "severity": {
+                    "type": "string",
+                    "enum": [
+                      "error",
+                      "warning",
+                      "info",
+                      "hint",
+                      "Error",
+                      "Warning",
+                      "Info",
+                      "Hint"
+                    ],
+                    "description": "Diagnostic severity."
+                  },
+                  "maxLines": {
+                    "type": "number",
+                    "description": "Maximum line span allowed for a match. 0 or less means unlimited."
+                  },
+                  "fix": {
+                    "description": "Optional regex replace fix. String form uses the rule pattern.",
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "description": "Replacement string (uses rule.pattern)."
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "pattern": {
+                            "type": "string",
+                            "description": "Regex pattern to apply within the diagnostic range."
+                          },
+                          "replace": {
+                            "type": "string",
+                            "description": "Replacement string for the fix."
+                          },
+                          "flags": {
+                            "type": "string",
+                            "description": "Optional flags for fix regex. g is auto-added if missing."
+                          }
+                        },
+                        "required": [
+                          "pattern",
+                          "replace"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              "description": "Regex rules for LaTeX linting."
+            },
+            "ignoreToken": {
+              "type": "string",
+              "default": "lint-ignore",
+              "description": "Line comment token to ignore diagnostics. Use '% lint-ignore' or '% lint-ignore: ruleId'."
+            },
+            "disableToken": {
+              "type": "string",
+              "default": "lint-disable",
+              "description": "Range ignore token to disable diagnostics until re-enabled. Use '% lint-disable' or '% lint-disable: ruleId'."
+            },
+            "enableToken": {
+              "type": "string",
+              "default": "lint-enable",
+              "description": "Range ignore token to re-enable diagnostics. Use '% lint-enable' or '% lint-enable: ruleId'."
+            },
+            "ignoreFileToken": {
+              "type": "string",
+              "default": "lint-ignore-file",
+              "description": "File ignore token. Use '% lint-ignore-file' anywhere in the file."
+            },
+            "fileExtensions": {
+              "type": "array",
+              "default": [
+                ".tex",
+                ".ltx",
+                ".ctx",
+                ".sty"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "description": "File extensions to lint if languageId is not latex."
+            },
+            "ignoreFiles": {
+              "type": "array",
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "description": "Glob patterns for files to ignore (matched against workspace-relative paths)."
+            },
+            "whitelistWords": {
+              "type": "array",
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "description": "Global whitelist words used by {{WHITELIST}} token in rule patterns."
+            },
+            "whitelistFiles": {
+              "type": "array",
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "description": "File paths (absolute or workspace-relative) containing whitelist words, one per line."
+            },
+            "whitelistMerge": {
+              "type": "boolean",
+              "default": true,
+              "description": "Whether to merge whitelist settings across scopes (global + workspace)."
+            }
+          }
+        },
+        "latexRegexLint.rules": {
+          "type": "array",
+          "default": [
+            {
+              "id": "double-space",
+              "pattern": "  +",
+              "flags": "g",
+              "message": "Double spaces found",
+              "severity": "warning",
+              "fix": " "
+            }
+          ],
+          "items": {
+            "type": "object",
+            "required": [
+              "pattern"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique rule identifier used for diagnostics and ignores."
+              },
+              "name": {
+                "type": "string",
+                "description": "Alternate identifier (used if id is missing)."
+              },
+              "pattern": {
+                "type": "string",
+                "description": "JavaScript regex pattern (no enclosing slashes)."
+              },
+              "flags": {
+                "type": "string",
+                "description": "Regex flags, e.g. g, i, m. g is auto-added if missing."
+              },
+              "message": {
+                "type": "string",
+                "description": "Diagnostic message to show."
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "error",
+                  "warning",
+                  "info",
+                  "hint",
+                  "Error",
+                  "Warning",
+                  "Info",
+                  "Hint"
+                ],
+                "description": "Diagnostic severity."
+              },
+              "maxLines": {
+                "type": "number",
+                "description": "Maximum line span allowed for a match. 0 or less means unlimited."
+              },
+              "whitelistWords": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Rule-specific whitelist words used by {{WHITELIST}} token."
+              },
+              "fix": {
+                "description": "Optional regex replace fix. String form uses the rule pattern.",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "description": "Replacement string (uses rule.pattern)."
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "pattern": {
+                        "type": "string",
+                        "description": "Regex pattern to apply within the diagnostic range."
+                      },
+                      "replace": {
+                        "type": "string",
+                        "description": "Replacement string for the fix."
+                      },
+                      "flags": {
+                        "type": "string",
+                        "description": "Optional flags for fix regex. g is auto-added if missing."
+                      }
+                    },
+                    "required": [
+                      "pattern",
+                      "replace"
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "description": "Regex rules for LaTeX linting."
+        },
+        "latexRegexLint.ignoreToken": {
+          "type": "string",
+          "default": "lint-ignore",
+          "description": "Line comment token to ignore diagnostics. Use '% lint-ignore' or '% lint-ignore: ruleId'."
+        },
+        "latexRegexLint.disableToken": {
+          "type": "string",
+          "default": "lint-disable",
+          "description": "Range ignore token to disable diagnostics until re-enabled. Use '% lint-disable' or '% lint-disable: ruleId'."
+        },
+        "latexRegexLint.enableToken": {
+          "type": "string",
+          "default": "lint-enable",
+          "description": "Range ignore token to re-enable diagnostics. Use '% lint-enable' or '% lint-enable: ruleId'."
+        },
+        "latexRegexLint.ignoreFileToken": {
+          "type": "string",
+          "default": "lint-ignore-file",
+          "description": "File ignore token. Use '% lint-ignore-file' anywhere in the file."
+        },
+        "latexRegexLint.fileExtensions": {
+          "type": "array",
+          "default": [
+            ".tex",
+            ".ltx",
+            ".ctx",
+            ".sty"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "File extensions to lint if languageId is not latex."
+        },
+        "latexRegexLint.ignoreFiles": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "Glob patterns for files to ignore (matched against workspace-relative paths)."
+        },
+        "latexRegexLint.whitelistWords": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "Global whitelist words used by {{WHITELIST}} token in rule patterns."
+        },
+        "latexRegexLint.whitelistFiles": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "File paths (absolute or workspace-relative) containing whitelist words, one per line."
+        },
+        "latexRegexLint.whitelistMerge": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to merge whitelist settings across scopes (global + workspace)."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "minimatch": "^9.0.5"
+  }
+}
