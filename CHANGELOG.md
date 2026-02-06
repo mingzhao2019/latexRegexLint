@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.0.3 - 2026-02-06
+- Release v0.0.3 (9d95ecb)
+- Document Marketplace publishing (a4e59de)
+- Update CHANGELOG for v0.0.2 (e915567)
+
+[Full Changelog](https://github.com/mingzhao2019/latexRegexLint/compare/v0.0.2...v0.0.3)
+
 ## v0.0.2 - 2026-02-06
 - Update dev log (959f1ec)
 - Update CHANGELOG for v0.0.2 (e717a21)
