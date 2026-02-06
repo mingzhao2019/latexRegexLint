@@ -1,5 +1,8 @@
 # LaTeX Regex Lint（中文说明）
 
+[![Release](https://img.shields.io/github/v/release/mingzhao2019/latexRegexLint)](https://github.com/mingzhao2019/latexRegexLint/releases)
+[![Release Workflow](https://github.com/mingzhao2019/latexRegexLint/actions/workflows/release.yml/badge.svg)](https://github.com/mingzhao2019/latexRegexLint/actions/workflows/release.yml)
+
 英文文档： [README.md](README.md)
 
 这是一个 VS Code 插件，用于在 LaTeX 文档中显示**自定义正则**匹配到的问题。支持诊断等级、跨行规则、Quick Fix、行内忽略、范围禁用/启用、文件级忽略、白名单词典等功能。
@@ -135,4 +138,8 @@
 
 ## 许可
 
-暂无（发布前请添加 LICENSE）。
+MIT，参见 [LICENSE](LICENSE)。
+
+## 发布说明
+
+见 [GitHub Releases](https://github.com/mingzhao2019/latexRegexLint/releases)。
